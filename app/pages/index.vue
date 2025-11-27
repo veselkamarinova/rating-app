@@ -2,9 +2,12 @@
   <div>
     <h1>Wine Test</h1>
     <p>Label: {{myWine.label }}</p>
-    <p>Price: {{ myWine.price }} EUR</p>
-    <p>Vintage: {{ myWine.vintage }}</p>
+    <p>typeWine: {{ myWine.typeWine }}</p>
     <p>Grape: {{ myWine.grapeVarietal }}</p>
+    <p>Vintage: {{ myWine.vintage }}</p>
+    <p>Winery: {{ myWine.winery }}</p>
+    <p>Price: {{ myWine.price }} EUR</p>
+    <p>Rating: {{ getStars(myWine.rating) }}</p>
   </div>
 </template>
 
@@ -23,4 +26,11 @@ const myWine = new Wine(
   'Bulgaria',               // appellation
   2021                      // vintage
 );
+// Rate the wine!
+myWine.setRating(2);
+
+// Function to display stars
+const getStars = (rating: number): string => {
+  return '⭐'.repeat(rating) + '☆'.repeat(5 - rating);
+};
 </script>

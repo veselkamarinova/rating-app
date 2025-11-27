@@ -1,7 +1,6 @@
 import { Product } from './Product';
 
 export class Wine extends Product {
-  // Wine-specific properties (only Wine has these)
   label: string;
   typeWine: string;
   color: string;
@@ -9,8 +8,8 @@ export class Wine extends Product {
   winery: string;
   appellation: string;
   vintage: number;
+  rating: number;
 
-  // Constructor
   constructor(
     price: number,
     store: string,
@@ -23,10 +22,8 @@ export class Wine extends Product {
     appellation: string,
     vintage: number
   ) {
-    // Call parent (Product) constructor
     super(price, store, typeProduct);
     
-    // Set Wine-specific properties
     this.label = label;
     this.typeWine = typeWine;
     this.color = color;
@@ -34,5 +31,14 @@ export class Wine extends Product {
     this.winery = winery;
     this.appellation = appellation;
     this.vintage = vintage;
+    this.rating = 0;
+  }
+
+  setRating(stars: number): void {
+    if (stars >= 0 && stars <= 5) {
+      this.rating = stars;
+    } else {
+      console.error('Rating must be between 0 and 5');
+    }
   }
 }
