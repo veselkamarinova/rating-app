@@ -27,7 +27,7 @@ const myWine = new Wine(
   2021                      // vintage
 );
 // Rate the wine!
-myWine.setRating(2);
+myWine.setRating(4);
 
 // Function to display stars
 const getStars = (rating: number): string => {
