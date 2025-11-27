@@ -1,13 +1,11 @@
 export class Product {
-  name: string;
   price: number;
   store: string;
-  type: string;
+  typeProduct: string;
 
-  constructor(name: string, price: number, store: string, type: string) {
-    this.name = name;
+  constructor(price: number, store: string, typeProduct: string) {
     this.price = price;
     this.store = store;
-    this.type = type;
+    this.typeProduct = typeProduct;
   }
 }
