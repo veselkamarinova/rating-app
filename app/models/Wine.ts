@@ -1,9 +1,9 @@
 import { Product } from './Product';
+import { WineType, ProductType } from './enums';
 
 export class Wine extends Product {
   label: string;
-  typeWine: string;
-  color: string;
+  typeWine: WineType;
   grapeVarietal: string;
   winery: string;
   appellation: string;
@@ -15,18 +15,16 @@ export class Wine extends Product {
     store: string,
     typeProduct: string,
     label: string,
-    typeWine: string,
-    color: string,
+    typeWine: WineType,
     grapeVarietal: string,
     winery: string,
     appellation: string,
     vintage: number
   ) {
-    super(price, store, typeProduct);
+    super(price, store, ProductType.Wine);
     
     this.label = label;
     this.typeWine = typeWine;
-    this.color = color;
     this.grapeVarietal = grapeVarietal;
     this.winery = winery;
     this.appellation = appellation;

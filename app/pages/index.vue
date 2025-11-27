@@ -13,15 +13,15 @@
 
 <script setup lang="ts">
 import { Wine } from '~/models/Wine';
+import { WineType } from '~/models/enums';
 
 const myWine = new Wine(
   18.87,                    // price
   'Vila Melnik',            // store
   'wine',                   // typeProduct
   'Aplauz',                 // label
-  'Red',                    // typeWine
-  'Red',                    // color
-  'Melnik 55',                 // grapeVarietal
+  WineType.Red,             // typeWine - Use enum!
+  'Melnik 55',              // grapeVarietal
   'Vila Melnik',            // winery
   'Bulgaria',               // appellation
   2021                      // vintage
