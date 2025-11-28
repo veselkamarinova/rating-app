@@ -1,11 +1,15 @@
 export enum WineType {
-  Red = 'Red',
-  White = 'White',
-  Rose = 'Rosé',
+  Still = 'Still',
   Sparkling = 'Sparkling',
   Fortified = 'Fortified',
   Dessert = 'Dessert',
   Orange = 'Orange'
+}
+
+export enum WineColor {
+  Red = 'Red',
+  White = 'White',
+  Rose = 'Rosé'
 }
 
 export enum ProductType {

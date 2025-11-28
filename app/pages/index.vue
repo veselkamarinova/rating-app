@@ -4,6 +4,7 @@
     <div v-for="wine in wines" :key="wine.label">
       <h2>{{ wine.label }}</h2>
       <p>Type: {{ wine.typeWine }}</p>
+      <p>Color: {{ wine.wineColor }}</p>
       <p>Grape: {{ wine.grapeVarietal }}</p>
       <p>Vintage: {{ wine.vintage }}</p>
       <p>Winery: {{ wine.winery }}</p>
@@ -16,7 +17,7 @@
 
 <script setup lang="ts">
 import { Wine } from '~/models/Wine';
-import { WineType } from '~/models/enums';
+import { WineType, WineColor } from '~/models/enums';
 
 // Create an array of wines
 const wines: Wine[] = [
@@ -25,10 +26,11 @@ const wines: Wine[] = [
     'Vila Melnik',
     'wine',
     'Aplauz',
-    WineType.Red,
+    WineType.Still,
+    WineColor.Red,
     'Melnik 55',
     'Vila Melnik',
-    'Bulgaria',
+    'с. Хърсово',
     2021
   ),
   new Wine(
@@ -36,7 +38,8 @@ const wines: Wine[] = [
     'Wine Shop Sofia',
     'wine',
     'Château Margaux',
-    WineType.Red,
+    WineType.Still,
+    WineColor.Red,
     'Cabernet Sauvignon',
     'Château Margaux',
     'Bordeaux',
@@ -47,7 +50,8 @@ const wines: Wine[] = [
     'Local Store',
     'wine',
     'Chardonnay Reserve',
-    WineType.White,
+    WineType.Still,
+    WineColor.White,
     'Chardonnay',
     'Domaine Leflaive',
     'Burgundy',
