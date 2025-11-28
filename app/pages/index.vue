@@ -73,7 +73,18 @@
       <p><strong>Vintage:</strong> {{ wine.vintage }}</p>
       <p><strong>Store:</strong> {{ wine.store }}</p>
       <p><strong>Price:</strong> {{ wine.price }} EUR</p>
-      <p><strong>Rating:</strong> {{ getStars(wine.rating) }}</p>
+      <p><strong>Rating:</strong></p>
+      <div class="star-rating">
+        <span 
+          v-for="star in 5" 
+          :key="star"
+          @click="wine.setRating(star)"
+          class="star"
+          style="cursor: pointer; font-size: 1.5em;"
+        >
+          {{ star <= wine.rating ? '⭐' : '☆' }}
+        </span>
+      </div>
       <hr>
     </div>
   </div>
