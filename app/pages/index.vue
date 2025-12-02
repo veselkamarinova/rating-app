@@ -111,6 +111,21 @@
         </select>
       </div>
 
+      <div>
+        <label><strong>Sort By:</strong></label>
+        <select v-model="sortBy" style="padding: 8px; border-radius: 4px; border: 2px solid #ddd;">
+          <option value="">Default (Most Recent)</option>
+          <option value="rating-desc">Rating (High to Low)</option>
+          <option value="rating-asc">Rating (Low to High)</option>
+          <option value="price-asc">Price (Low to High)</option>
+          <option value="price-desc">Price (High to Low)</option>
+          <option value="vintage-desc">Vintage (Newest First)</option>
+          <option value="vintage-asc">Vintage (Oldest First)</option>
+          <option value="label-asc">Label (A-Z)</option>
+          <option value="label-desc">Label (Z-A)</option>
+        </select>
+      </div>
+
       <button 
         @click="clearFilters" 
         style="padding: 8px 15px; background-color: #6c757d; color: white; border: none; border-radius: 4px; cursor: pointer;"
@@ -159,6 +174,9 @@ const searchQuery = ref('');
 const typeFilter = ref('');
 const colorFilter = ref('');
 const ratingFilter = ref(0);
+
+// Sort variable
+const sortBy = ref('');
 
 // Form data for new wine
 const newWine = ref({
@@ -250,6 +268,38 @@ const filteredWines = computed(() => {
     result = result.filter(wine => wine.rating >= ratingFilter.value);
   }
   
+  // Apply sorting
+  if (sortBy.value) {
+    result = [...result]; // Create a copy to avoid mutating original
+    
+    switch (sortBy.value) {
+      case 'rating-desc':
+        result.sort((a, b) => b.rating - a.rating);
+        break;
+      case 'rating-asc':
+        result.sort((a, b) => a.rating - b.rating);
+        break;
+      case 'price-asc':
+        result.sort((a, b) => a.price - b.price);
+        break;
+      case 'price-desc':
+        result.sort((a, b) => b.price - a.price);
+        break;
+      case 'vintage-desc':
+        result.sort((a, b) => b.vintage - a.vintage);
+        break;
+      case 'vintage-asc':
+        result.sort((a, b) => a.vintage - b.vintage);
+        break;
+      case 'label-asc':
+        result.sort((a, b) => a.label.localeCompare(b.label));
+        break;
+      case 'label-desc':
+        result.sort((a, b) => b.label.localeCompare(a.label));
+        break;
+    }
+  }
+  
   return result;
 });
 
@@ -330,6 +380,7 @@ const clearFilters = () => {
   typeFilter.value = '';
   colorFilter.value = '';
   ratingFilter.value = 0;
+  sortBy.value = '';
 };
 
 // Function to display stars
