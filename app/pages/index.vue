@@ -1,239 +1,391 @@
 <template>
-  <div>
-    <h1>Add New Wine</h1>
-    <form @submit.prevent="addWine" class="wine-form">
-      <div class="form-group">
-        <label>Label:</label>
-        <input
-          v-model="newWine.label"
-          placeholder="e.g. Château Margaux"
-          required
-        />
-      </div>
-
-      <div class="form-group">
-        <label>Wine Type:</label>
-        <select v-model="newWine.typeWine" required>
-          <option :value="WineType.Still">Still</option>
-          <option :value="WineType.Sparkling">Sparkling</option>
-          <option :value="WineType.Fortified">Fortified</option>
-          <option :value="WineType.Dessert">Dessert</option>
-          <option :value="WineType.Orange">Orange</option>
-        </select>
-      </div>
-
-      <div class="form-group">
-        <label>Wine Color:</label>
-        <select v-model="newWine.wineColor" required>
-          <option :value="WineColor.Red">Red</option>
-          <option :value="WineColor.White">White</option>
-          <option :value="WineColor.Rose">Rosé</option>
-        </select>
-      </div>
-
-      <div class="form-group">
-        <label>Grape Varietal:</label>
-        <input
-          v-model="newWine.grapeVarietal"
-          placeholder="e.g. Cabernet Sauvignon"
-          required
-        />
-      </div>
-
-      <div class="form-group">
-        <label>Winery:</label>
-        <input
-          v-model="newWine.winery"
-          placeholder="e.g. Château Margaux"
-          required
-        />
-      </div>
-
-      <div class="form-group">
-        <label>Appellation / Region:</label>
-        <input
-          v-model="newWine.appellation"
-          placeholder="e.g. Bordeaux, Bulgaria"
-          required
-        />
-      </div>
-
-      <div class="form-group">
-        <label>Vintage (Year):</label>
-        <input
-          v-model.number="newWine.vintage"
-          type="number"
-          placeholder="e.g. 2020 (or leave 0 for NV)"
-          min="0"
-          max="2025"
-        />
-        <small style="display: block; color: #666; margin-top: 5px"
-          >Enter 0 for Non-Vintage wines</small
+  <div
+    class="min-vh-100"
+    style="background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%)"
+  >
+    <div class="container py-5">
+      <div class="text-center mb-5">
+        <h1
+          class="display-3 fw-bold mb-3"
+          style="
+            background: linear-gradient(
+              135deg,
+              #6a1b4d 0%,
+              #8b3a62 50%,
+              #6a1b4d 100%
+            );
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+          "
         >
+          <span style="background: none; -webkit-text-fill-color: initial"
+            >🍷</span
+          >
+          Wine Rating Collection
+        </h1>
+        <p class="lead text-secondary fs-5">
+          Curate and discover your perfect wines
+        </p>
       </div>
 
-      <div class="form-group">
-        <label>Price:</label>
-        <input
-          v-model.number="newWine.price"
-          type="number"
-          step="0.01"
-          placeholder="e.g. 25.99"
-          min="0"
-          required
-        />
+      <div class="card border-0 shadow mb-5">
+        <div class="card-body p-4">
+          <div class="d-flex align-items-center mb-4">
+            <div
+              class="rounded-circle d-flex align-items-center justify-content-center me-3"
+              style="
+                width: 48px;
+                height: 48px;
+                background: linear-gradient(135deg, #6a1b4d 0%, #8b3a62 100%);
+              "
+            >
+              <span class="text-white fs-4">+</span>
+            </div>
+            <div>
+              <h2 class="h4 mb-0 fw-bold text-dark">Add New Wine</h2>
+              <p class="text-muted small mb-0">Expand your collection</p>
+            </div>
+          </div>
+          <form @submit.prevent="addWine">
+            <div class="mb-3">
+              <label class="form-label fw-semibold">Label:</label>
+              <input
+                v-model="newWine.label"
+                class="form-control"
+                placeholder="e.g. Château Margaux"
+                required
+              />
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label fw-semibold">Wine Type:</label>
+              <select v-model="newWine.typeWine" class="form-select" required>
+                <option :value="WineType.Still">Still</option>
+                <option :value="WineType.Sparkling">Sparkling</option>
+                <option :value="WineType.Fortified">Fortified</option>
+                <option :value="WineType.Dessert">Dessert</option>
+                <option :value="WineType.Orange">Orange</option>
+              </select>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label fw-semibold">Wine Color:</label>
+              <select v-model="newWine.wineColor" class="form-select" required>
+                <option :value="WineColor.Red">Red</option>
+                <option :value="WineColor.White">White</option>
+                <option :value="WineColor.Rose">Rosé</option>
+              </select>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label fw-semibold">Grape Varietal:</label>
+              <input
+                v-model="newWine.grapeVarietal"
+                class="form-control"
+                placeholder="e.g. Cabernet Sauvignon"
+                required
+              />
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label fw-semibold">Winery:</label>
+              <input
+                v-model="newWine.winery"
+                class="form-control"
+                placeholder="e.g. Château Margaux"
+                required
+              />
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label fw-semibold"
+                >Appellation / Region:</label
+              >
+              <input
+                v-model="newWine.appellation"
+                class="form-control"
+                placeholder="e.g. Bordeaux, Bulgaria"
+                required
+              />
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label fw-semibold">Vintage (Year):</label>
+              <input
+                v-model.number="newWine.vintage"
+                type="number"
+                class="form-control"
+                placeholder="e.g. 2020 (or leave 0 for NV)"
+                min="0"
+                max="2025"
+              />
+              <small class="form-text text-muted"
+                >Enter 0 for Non-Vintage wines</small
+              >
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label fw-semibold">Price:</label>
+              <input
+                v-model.number="newWine.price"
+                type="number"
+                step="0.01"
+                class="form-control"
+                placeholder="e.g. 25.99"
+                min="0"
+                required
+              />
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label fw-semibold">Store / Shop:</label>
+              <input
+                v-model="newWine.store"
+                class="form-control"
+                placeholder="e.g. Wine Shop Sofia"
+                required
+              />
+            </div>
+
+            <div class="d-grid gap-2">
+              <button
+                type="submit"
+                class="btn btn-lg text-white fw-semibold"
+                style="
+                  background: linear-gradient(135deg, #6a1b4d 0%, #8b3a62 100%);
+                  border: none;
+                  padding: 14px;
+                  border-radius: 12px;
+                  transition: transform 0.2s, box-shadow 0.2s;
+                "
+                onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 8px 20px rgba(106, 27, 77, 0.3)'"
+                onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'"
+              >
+                ✨ Add to Collection
+              </button>
+            </div>
+          </form>
+        </div>
       </div>
 
-      <div class="form-group">
-        <label>Store / Shop:</label>
-        <input
-          v-model="newWine.store"
-          placeholder="e.g. Wine Shop Sofia"
-          required
-        />
+      <div class="card border-0 shadow mb-4">
+        <div class="card-body p-4">
+          <div class="d-flex align-items-center justify-content-between mb-4">
+            <div>
+              <h2 class="h3 mb-1 fw-bold text-dark">My Collection</h2>
+              <p class="text-muted mb-0">
+                <span
+                  class="badge rounded-pill"
+                  style="
+                    background: linear-gradient(
+                      135deg,
+                      #6a1b4d 0%,
+                      #8b3a62 100%
+                    );
+                  "
+                  >{{ filteredWines.length }} wines</span
+                >
+              </p>
+            </div>
+          </div>
+          <div class="mb-4">
+            <input
+              v-model="searchQuery"
+              type="text"
+              class="form-control form-control-lg border-0 shadow-sm"
+              style="border-radius: 12px; background-color: #f8f9fa"
+              placeholder="🔍 Search wines by name, winery, grape, color, or region..."
+            />
+          </div>
+
+          <div class="row g-3 mb-4">
+            <div class="col-md-3">
+              <label class="form-label fw-semibold text-dark small"
+                >Type:</label
+              >
+              <select
+                v-model="typeFilter"
+                class="form-select border-0 shadow-sm"
+                style="border-radius: 10px; background-color: #f8f9fa"
+              >
+                <option value="">All Types</option>
+                <option :value="WineType.Still">Still</option>
+                <option :value="WineType.Sparkling">Sparkling</option>
+                <option :value="WineType.Fortified">Fortified</option>
+                <option :value="WineType.Dessert">Dessert</option>
+                <option :value="WineType.Orange">Orange</option>
+              </select>
+            </div>
+
+            <div class="col-md-3">
+              <label class="form-label fw-semibold text-dark small"
+                >Color:</label
+              >
+              <select
+                v-model="colorFilter"
+                class="form-select border-0 shadow-sm"
+                style="border-radius: 10px; background-color: #f8f9fa"
+              >
+                <option value="">All Colors</option>
+                <option :value="WineColor.Red">Red</option>
+                <option :value="WineColor.White">White</option>
+                <option :value="WineColor.Rose">Rosé</option>
+              </select>
+            </div>
+
+            <div class="col-md-3">
+              <label class="form-label fw-semibold text-dark small"
+                >Rating:</label
+              >
+              <select
+                v-model="ratingFilter"
+                class="form-select border-0 shadow-sm"
+                style="border-radius: 10px; background-color: #f8f9fa"
+              >
+                <option value="0">All Ratings</option>
+                <option value="5">5 Stars ⭐⭐⭐⭐⭐</option>
+                <option value="4">4+ Stars ⭐⭐⭐⭐</option>
+                <option value="3">3+ Stars ⭐⭐⭐</option>
+                <option value="2">2+ Stars ⭐⭐</option>
+                <option value="1">1+ Stars ⭐</option>
+              </select>
+            </div>
+
+            <div class="col-md-3">
+              <label class="form-label fw-semibold text-dark small"
+                >Sort By:</label
+              >
+              <select
+                v-model="sortBy"
+                class="form-select border-0 shadow-sm"
+                style="border-radius: 10px; background-color: #f8f9fa"
+              >
+                <option value="">Default (Most Recent)</option>
+                <option value="rating-desc">Rating (High to Low)</option>
+                <option value="rating-asc">Rating (Low to High)</option>
+                <option value="price-asc">Price (Low to High)</option>
+                <option value="price-desc">Price (High to Low)</option>
+                <option value="vintage-desc">Vintage (Newest First)</option>
+                <option value="vintage-asc">Vintage (Oldest First)</option>
+                <option value="label-asc">Label (A-Z)</option>
+                <option value="label-desc">Label (Z-A)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="d-grid mb-3">
+            <button
+              @click="clearFilters"
+              class="btn btn-outline-dark border-2"
+              style="border-radius: 10px; font-weight: 500"
+            >
+              ↻ Clear All Filters
+            </button>
+          </div>
+        </div>
       </div>
 
-      <button type="submit" class="submit-btn">Add Wine to Collection</button>
-    </form>
-
-    <hr />
-
-    <h1>My Wine Collection ({{ filteredWines.length }} wines)</h1>
-
-    <!-- Search Box -->
-    <div style="margin-bottom: 20px">
-      <input
-        v-model="searchQuery"
-        type="text"
-        placeholder="🔍 Search wines by name, winery, or grape..."
-        style="
-          width: 100%;
-          padding: 10px;
-          font-size: 16px;
-          border: 2px solid #ddd;
-          border-radius: 4px;
-        "
-      />
-    </div>
-
-    <!-- Filters -->
-    <div style="margin-bottom: 20px; display: flex; gap: 10px; flex-wrap: wrap">
-      <div>
-        <label><strong>Type:</strong></label>
-        <select
-          v-model="typeFilter"
-          style="padding: 8px; border-radius: 4px; border: 2px solid #ddd"
+      <div class="row">
+        <div
+          v-for="wine in filteredWines"
+          :key="wine.label"
+          class="col-md-6 col-lg-4 mb-4"
         >
-          <option value="">All Types</option>
-          <option :value="WineType.Still">Still</option>
-          <option :value="WineType.Sparkling">Sparkling</option>
-          <option :value="WineType.Fortified">Fortified</option>
-          <option :value="WineType.Dessert">Dessert</option>
-          <option :value="WineType.Orange">Orange</option>
-        </select>
-      </div>
+          <div
+            class="card h-100 border-0 shadow"
+            style="
+              border-radius: 16px;
+              transition: transform 0.3s, box-shadow 0.3s;
+            "
+            onmouseover="this.style.transform='translateY(-8px)'; this.style.boxShadow='0 12px 24px rgba(0,0,0,0.15)'"
+            onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 2px 8px rgba(0,0,0,0.1)'"
+          >
+            <div class="card-body p-4">
+              <div
+                class="d-flex justify-content-between align-items-start mb-3"
+              >
+                <h3 class="h5 mb-0 fw-bold text-dark">{{ wine.label }}</h3>
+              </div>
+              <div class="small text-muted mb-3">
+                <p class="mb-2">
+                  <span class="fw-semibold text-dark">Type:</span>
+                  {{ wine.typeWine }}
+                </p>
+                <p class="mb-2">
+                  <span class="fw-semibold text-dark">Color:</span>
+                  {{ wine.wineColor }}
+                </p>
+                <p class="mb-2">
+                  <span class="fw-semibold text-dark">Grape:</span>
+                  {{ wine.grapeVarietal }}
+                </p>
+                <p class="mb-2">
+                  <span class="fw-semibold text-dark">Winery:</span>
+                  {{ wine.winery }}
+                </p>
+                <p class="mb-2">
+                  <span class="fw-semibold text-dark">Region:</span>
+                  {{ wine.appellation }}
+                </p>
+                <p class="mb-2">
+                  <span class="fw-semibold text-dark">Vintage:</span>
+                  {{ wine.vintage === 0 ? "NV (Non-Vintage)" : wine.vintage }}
+                </p>
+                <p class="mb-2">
+                  <span class="fw-semibold text-dark">Store:</span>
+                  {{ wine.store }}
+                </p>
+              </div>
+              <div
+                class="d-flex justify-content-between align-items-center mb-3 p-3 rounded"
+                style="
+                  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+                "
+              >
+                <span class="text-muted small">Price</span>
+                <span class="fw-bold fs-5" style="color: #6a1b4d"
+                  >{{ wine.price }} EUR</span
+                >
+              </div>
 
-      <div>
-        <label><strong>Color:</strong></label>
-        <select
-          v-model="colorFilter"
-          style="padding: 8px; border-radius: 4px; border: 2px solid #ddd"
-        >
-          <option value="">All Colors</option>
-          <option :value="WineColor.Red">Red</option>
-          <option :value="WineColor.White">White</option>
-          <option :value="WineColor.Rose">Rosé</option>
-        </select>
+              <div class="mb-3">
+                <div
+                  class="d-flex justify-content-between align-items-center mb-2"
+                >
+                  <span class="fw-semibold text-dark small">Your Rating</span>
+                </div>
+                <div class="star-rating">
+                  <span
+                    v-for="star in 5"
+                    :key="star"
+                    @click="wine.setRating(star)"
+                    class="star"
+                    style="
+                      cursor: pointer;
+                      font-size: 1.8rem;
+                      transition: transform 0.2s;
+                    "
+                    onmouseover="this.style.transform='scale(1.2)'"
+                    onmouseout="this.style.transform='scale(1)'"
+                  >
+                    {{ star <= wine.rating ? "⭐" : "☆" }}
+                  </span>
+                </div>
+              </div>
+              <div class="d-grid gap-2">
+                <button
+                  @click="deleteWine(wine)"
+                  class="btn btn-outline-danger border-2"
+                  style="border-radius: 10px; font-weight: 500"
+                >
+                  🗑️ Remove
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
-
-      <div>
-        <label><strong>Rating:</strong></label>
-        <select
-          v-model="ratingFilter"
-          style="padding: 8px; border-radius: 4px; border: 2px solid #ddd"
-        >
-          <option value="0">All Ratings</option>
-          <option value="5">5 Stars ⭐⭐⭐⭐⭐</option>
-          <option value="4">4+ Stars ⭐⭐⭐⭐</option>
-          <option value="3">3+ Stars ⭐⭐⭐</option>
-          <option value="2">2+ Stars ⭐⭐</option>
-          <option value="1">1+ Stars ⭐</option>
-        </select>
-      </div>
-
-      <div>
-        <label><strong>Sort By:</strong></label>
-        <select
-          v-model="sortBy"
-          style="padding: 8px; border-radius: 4px; border: 2px solid #ddd"
-        >
-          <option value="">Default (Most Recent)</option>
-          <option value="rating-desc">Rating (High to Low)</option>
-          <option value="rating-asc">Rating (Low to High)</option>
-          <option value="price-asc">Price (Low to High)</option>
-          <option value="price-desc">Price (High to Low)</option>
-          <option value="vintage-desc">Vintage (Newest First)</option>
-          <option value="vintage-asc">Vintage (Oldest First)</option>
-          <option value="label-asc">Label (A-Z)</option>
-          <option value="label-desc">Label (Z-A)</option>
-        </select>
-      </div>
-
-      <button
-        @click="clearFilters"
-        style="
-          padding: 8px 15px;
-          background-color: #6c757d;
-          color: white;
-          border: none;
-          border-radius: 4px;
-          cursor: pointer;
-        "
-      >
-        Clear Filters
-      </button>
-    </div>
-
-    <div v-for="wine in filteredWines" :key="wine.label" class="wine-card">
-      <h2>{{ wine.label }}</h2>
-      <p><strong>Type:</strong> {{ wine.typeWine }}</p>
-      <p><strong>Color:</strong> {{ wine.wineColor }}</p>
-      <p><strong>Grape:</strong> {{ wine.grapeVarietal }}</p>
-      <p><strong>Winery:</strong> {{ wine.winery }}</p>
-      <p><strong>Region:</strong> {{ wine.appellation }}</p>
-      <p>
-        <strong>Vintage:</strong>
-        {{ wine.vintage === 0 ? "NV (Non-Vintage)" : wine.vintage }}
-      </p>
-      <p><strong>Store:</strong> {{ wine.store }}</p>
-      <p><strong>Price:</strong> {{ wine.price }} EUR</p>
-      <p><strong>Rating:</strong></p>
-      <div class="star-rating">
-        <span
-          v-for="star in 5"
-          :key="star"
-          @click="wine.setRating(star)"
-          class="star"
-          style="cursor: pointer; font-size: 1.5em"
-        >
-          {{ star <= wine.rating ? "⭐" : "☆" }}
-        </span>
-      </div>
-      <button
-        @click="deleteWine(wine)"
-        style="
-          margin-top: 10px;
-          padding: 5px 15px;
-          background-color: #dc3545;
-          color: white;
-          border: none;
-          border-radius: 4px;
-          cursor: pointer;
-        "
-      >
-        Delete Wine
-      </button>
-      <hr />
     </div>
   </div>
 </template>
@@ -469,3 +621,7 @@ const getStars = (rating: number): string => {
   return "⭐".repeat(rating) + "☆".repeat(5 - rating);
 };
 </script>
+
+<style scoped>
+/* Minimal custom styles - Bootstrap handles most styling */
+</style>
