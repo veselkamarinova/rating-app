@@ -85,6 +85,7 @@
           {{ star <= wine.rating ? '⭐' : '☆' }}
         </span>
       </div>
+      <button @click="deleteWine(wine)" style="margin-top: 10px; padding: 5px 15px; background-color: #dc3545; color: white; border: none; border-radius: 4px; cursor: pointer;">Delete Wine</button>
       <hr>
     </div>
   </div>
@@ -217,6 +218,11 @@ const addWine = () => {
     appellation: '',
     vintage: 2024
   };
+};
+
+// Function to delete a wine
+const deleteWine = (wineToDelete: Wine) => {
+  wines.value = wines.value.filter(wine => wine !== wineToDelete);
 };
 
 // Function to display stars
