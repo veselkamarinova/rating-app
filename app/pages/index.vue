@@ -62,8 +62,19 @@
 
     <hr>
 
-    <h1>My Wine Collection ({{ wines.length }} wines)</h1>
-    <div v-for="wine in wines" :key="wine.label" class="wine-card">
+    <h1>My Wine Collection ({{ filteredWines.length }} wines)</h1>
+    
+    <!-- Search Box -->
+    <div style="margin-bottom: 20px;">
+      <input 
+        v-model="searchQuery" 
+        type="text" 
+        placeholder="🔍 Search wines by name, winery, or grape..."
+        style="width: 100%; padding: 10px; font-size: 16px; border: 2px solid #ddd; border-radius: 4px;"
+      >
+    </div>
+
+    <div v-for="wine in filteredWines" :key="wine.label" class="wine-card">
       <h2>{{ wine.label }}</h2>
       <p><strong>Type:</strong> {{ wine.typeWine }}</p>
       <p><strong>Color:</strong> {{ wine.wineColor }}</p>
@@ -92,9 +103,12 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch, onMounted } from 'vue';
+import { ref, watch, onMounted, computed } from 'vue';
 import { Wine } from '~/models/Wine';
 import { WineType, WineColor } from '~/models/enums';
+
+// Search query
+const searchQuery = ref('');
 
 // Form data for new wine
 const newWine = ref({
@@ -153,6 +167,21 @@ const wines = ref<Wine[]>([
 wines.value[0]?.setRating(5);
 wines.value[1]?.setRating(4);
 wines.value[2]?.setRating(3);
+
+// Computed property for filtered wines
+const filteredWines = computed(() => {
+  if (!searchQuery.value) {
+    return wines.value; // No search query, show all wines
+  }
+  
+  const query = searchQuery.value.toLowerCase();
+  return wines.value.filter(wine => 
+    wine.label.toLowerCase().includes(query) ||
+    wine.winery.toLowerCase().includes(query) ||
+    wine.grapeVarietal.toLowerCase().includes(query) ||
+    wine.appellation.toLowerCase().includes(query)
+  );
+});
 
 // Load wines from localStorage on page load
 onMounted(() => {
