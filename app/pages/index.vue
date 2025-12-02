@@ -91,7 +91,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, watch, onMounted } from 'vue';
 import { Wine } from '~/models/Wine';
 import { WineType, WineColor } from '~/models/enums';
 
@@ -152,6 +152,41 @@ const wines = ref<Wine[]>([
 wines.value[0]?.setRating(5);
 wines.value[1]?.setRating(4);
 wines.value[2]?.setRating(3);
+
+// Load wines from localStorage on page load
+onMounted(() => {
+  const savedWines = localStorage.getItem('wines');
+  
+  if (savedWines) {
+    try {
+      const parsed = JSON.parse(savedWines);
+      const wineObjects = parsed.map((data: any) => {
+        const wine = new Wine(
+          data.price,
+          data.store,
+          data.typeProduct,
+          data.label,
+          data.typeWine,
+          data.wineColor,
+          data.grapeVarietal,
+          data.winery,
+          data.appellation,
+          data.vintage
+        );
+        wine.setRating(data.rating);
+        return wine;
+      });
+      wines.value = wineObjects;
+    } catch (error) {
+      console.error('Error loading wines:', error);
+    }
+  }
+});
+
+// Save wines to localStorage whenever they change
+watch(wines, () => {
+  localStorage.setItem('wines', JSON.stringify(wines.value));
+}, { deep: true });
 
 // Function to add new wine
 const addWine = () => {
