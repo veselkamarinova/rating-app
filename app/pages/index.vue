@@ -44,7 +44,8 @@
 
       <div class="form-group">
         <label>Vintage (Year):</label>
-        <input v-model.number="newWine.vintage" type="number" placeholder="e.g. 2020" min="1900" max="2025" required>
+        <input v-model.number="newWine.vintage" type="number" placeholder="e.g. 2020 (or leave 0 for NV)" min="0" max="2025">
+        <small style="display: block; color: #666; margin-top: 5px;">Enter 0 for Non-Vintage wines</small>
       </div>
 
       <div class="form-group">
@@ -72,6 +73,50 @@
         placeholder="🔍 Search wines by name, winery, or grape..."
         style="width: 100%; padding: 10px; font-size: 16px; border: 2px solid #ddd; border-radius: 4px;"
       >
+    </div>
+
+    <!-- Filters -->
+    <div style="margin-bottom: 20px; display: flex; gap: 10px; flex-wrap: wrap;">
+      <div>
+        <label><strong>Type:</strong></label>
+        <select v-model="typeFilter" style="padding: 8px; border-radius: 4px; border: 2px solid #ddd;">
+          <option value="">All Types</option>
+          <option :value="WineType.Still">Still</option>
+          <option :value="WineType.Sparkling">Sparkling</option>
+          <option :value="WineType.Fortified">Fortified</option>
+          <option :value="WineType.Dessert">Dessert</option>
+          <option :value="WineType.Orange">Orange</option>
+        </select>
+      </div>
+
+      <div>
+        <label><strong>Color:</strong></label>
+        <select v-model="colorFilter" style="padding: 8px; border-radius: 4px; border: 2px solid #ddd;">
+          <option value="">All Colors</option>
+          <option :value="WineColor.Red">Red</option>
+          <option :value="WineColor.White">White</option>
+          <option :value="WineColor.Rose">Rosé</option>
+        </select>
+      </div>
+
+      <div>
+        <label><strong>Rating:</strong></label>
+        <select v-model="ratingFilter" style="padding: 8px; border-radius: 4px; border: 2px solid #ddd;">
+          <option value="0">All Ratings</option>
+          <option value="5">5 Stars ⭐⭐⭐⭐⭐</option>
+          <option value="4">4+ Stars ⭐⭐⭐⭐</option>
+          <option value="3">3+ Stars ⭐⭐⭐</option>
+          <option value="2">2+ Stars ⭐⭐</option>
+          <option value="1">1+ Stars ⭐</option>
+        </select>
+      </div>
+
+      <button 
+        @click="clearFilters" 
+        style="padding: 8px 15px; background-color: #6c757d; color: white; border: none; border-radius: 4px; cursor: pointer;"
+      >
+        Clear Filters
+      </button>
     </div>
 
     <div v-for="wine in filteredWines" :key="wine.label" class="wine-card">
@@ -109,6 +154,11 @@ import { WineType, WineColor } from '~/models/enums';
 
 // Search query
 const searchQuery = ref('');
+
+// Filter variables
+const typeFilter = ref('');
+const colorFilter = ref('');
+const ratingFilter = ref(0);
 
 // Form data for new wine
 const newWine = ref({
@@ -170,17 +220,37 @@ wines.value[2]?.setRating(3);
 
 // Computed property for filtered wines
 const filteredWines = computed(() => {
-  if (!searchQuery.value) {
-    return wines.value; // No search query, show all wines
+  let result = wines.value;
+  
+  // Apply search filter
+  if (searchQuery.value) {
+    const query = searchQuery.value.toLowerCase();
+    result = result.filter(wine => 
+      wine.label.toLowerCase().includes(query) ||
+      wine.winery.toLowerCase().includes(query) ||
+      wine.grapeVarietal.toLowerCase().includes(query) ||
+      wine.appellation.toLowerCase().includes(query) ||
+      wine.typeWine.toLowerCase().includes(query) ||
+      wine.wineColor.toLowerCase().includes(query)
+    );
   }
   
-  const query = searchQuery.value.toLowerCase();
-  return wines.value.filter(wine => 
-    wine.label.toLowerCase().includes(query) ||
-    wine.winery.toLowerCase().includes(query) ||
-    wine.grapeVarietal.toLowerCase().includes(query) ||
-    wine.appellation.toLowerCase().includes(query)
-  );
+  // Apply type filter
+  if (typeFilter.value) {
+    result = result.filter(wine => wine.typeWine === typeFilter.value);
+  }
+  
+  // Apply color filter
+  if (colorFilter.value) {
+    result = result.filter(wine => wine.wineColor === colorFilter.value);
+  }
+  
+  // Apply rating filter
+  if (ratingFilter.value > 0) {
+    result = result.filter(wine => wine.rating >= ratingFilter.value);
+  }
+  
+  return result;
 });
 
 // Load wines from localStorage on page load
@@ -252,6 +322,14 @@ const addWine = () => {
 // Function to delete a wine
 const deleteWine = (wineToDelete: Wine) => {
   wines.value = wines.value.filter(wine => wine !== wineToDelete);
+};
+
+// Function to clear all filters
+const clearFilters = () => {
+  searchQuery.value = '';
+  typeFilter.value = '';
+  colorFilter.value = '';
+  ratingFilter.value = 0;
 };
 
 // Function to display stars
