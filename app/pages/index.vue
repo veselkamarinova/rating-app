@@ -126,7 +126,7 @@
       <p><strong>Grape:</strong> {{ wine.grapeVarietal }}</p>
       <p><strong>Winery:</strong> {{ wine.winery }}</p>
       <p><strong>Region:</strong> {{ wine.appellation }}</p>
-      <p><strong>Vintage:</strong> {{ wine.vintage }}</p>
+      <p><strong>Vintage:</strong> {{ wine.vintage === 0 ? 'NV (Non-Vintage)' : wine.vintage }}</p>
       <p><strong>Store:</strong> {{ wine.store }}</p>
       <p><strong>Price:</strong> {{ wine.price }} EUR</p>
       <p><strong>Rating:</strong></p>
@@ -170,7 +170,7 @@ const newWine = ref({
   grapeVarietal: '',
   winery: '',
   appellation: '',
-  vintage: 2024
+  vintage: 0  // Default to 0 (NV)
 });
 
 // Make wines array reactive
@@ -315,7 +315,7 @@ const addWine = () => {
     grapeVarietal: '',
     winery: '',
     appellation: '',
-    vintage: 2024
+    vintage: 0  // Default to 0 (NV)
   };
 };
 
