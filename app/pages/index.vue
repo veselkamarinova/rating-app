@@ -29,24 +29,88 @@
         </p>
       </div>
 
-      <div class="card border-0 shadow mb-5">
-        <div class="card-body p-4">
-          <div class="d-flex align-items-center mb-4">
-            <div
-              class="rounded-circle d-flex align-items-center justify-content-center me-3"
-              style="
-                width: 48px;
-                height: 48px;
-                background: linear-gradient(135deg, #6a1b4d 0%, #8b3a62 100%);
-              "
-            >
-              <span class="text-white fs-4">+</span>
-            </div>
-            <div>
-              <h2 class="h4 mb-0 fw-bold text-dark">Add New Wine</h2>
-              <p class="text-muted small mb-0">Expand your collection</p>
-            </div>
+      <!-- Success Message Toast -->
+      <div
+        v-if="showSuccessMessage"
+        class="alert alert-success border-0 shadow-sm mb-4"
+        style="border-radius: 12px; animation: slideIn 0.3s ease-out"
+      >
+        <div class="d-flex align-items-center">
+          <span class="fs-4 me-3">✅</span>
+          <div>
+            <strong>Wine Added Successfully!</strong>
+            <p class="mb-0 small">
+              Your wine has been added to the collection.
+            </p>
           </div>
+        </div>
+      </div>
+
+      <!-- Add Wine Button (when form is closed) -->
+      <div v-if="!isFormOpen" class="mb-5 add-wine-trigger" @click="toggleForm">
+        <button
+          class="btn rounded-circle d-flex align-items-center justify-content-center shadow add-wine-btn"
+        >
+          <span class="text-white fs-3">+</span>
+        </button>
+        <div class="ms-3">
+          <h3 class="h5 mb-0 fw-bold text-dark">Add New Wine</h3>
+          <p class="text-muted small mb-0">Click to expand form</p>
+        </div>
+      </div>
+
+      <!-- Collapsible Form -->
+      <div
+        v-if="isFormOpen"
+        class="card border-0 shadow mb-5"
+        style="animation: slideDown 0.3s ease-out"
+      >
+        <div class="card-body p-4">
+          <div class="d-flex align-items-center justify-content-between mb-4">
+            <div class="d-flex align-items-center">
+              <div
+                class="rounded-circle d-flex align-items-center justify-content-center me-3"
+                style="
+                  width: 48px;
+                  height: 48px;
+                  background: linear-gradient(135deg, #6a1b4d 0%, #8b3a62 100%);
+                "
+              >
+                <span class="text-white fs-4">+</span>
+              </div>
+              <div>
+                <h2 class="h4 mb-0 fw-bold text-dark">Add New Wine</h2>
+                <p class="text-muted small mb-0">Expand your collection</p>
+              </div>
+            </div>
+            <button
+              @click="toggleForm"
+              type="button"
+              class="btn btn-link text-muted p-0"
+              style="font-size: 1.5rem; text-decoration: none"
+            >
+              ×
+            </button>
+          </div>
+
+          <!-- Quick Add Toggle -->
+          <div class="form-check form-switch mb-4">
+            <input
+              class="form-check-input"
+              type="checkbox"
+              id="quickAddToggle"
+              v-model="quickAddMode"
+              style="cursor: pointer"
+            />
+            <label
+              class="form-check-label text-muted small"
+              for="quickAddToggle"
+              style="cursor: pointer"
+            >
+              Quick Add Mode (Essential fields only)
+            </label>
+          </div>
+
           <form @submit.prevent="addWine">
             <div class="mb-3">
               <label class="form-label fw-semibold">Label:</label>
@@ -78,7 +142,7 @@
               </select>
             </div>
 
-            <div class="mb-3">
+            <div v-if="!quickAddMode" class="mb-3">
               <label class="form-label fw-semibold">Grape Varietal:</label>
               <input
                 v-model="newWine.grapeVarietal"
@@ -88,7 +152,7 @@
               />
             </div>
 
-            <div class="mb-3">
+            <div v-if="!quickAddMode" class="mb-3">
               <label class="form-label fw-semibold">Winery:</label>
               <input
                 v-model="newWine.winery"
@@ -110,7 +174,7 @@
               />
             </div>
 
-            <div class="mb-3">
+            <div v-if="!quickAddMode" class="mb-3">
               <label class="form-label fw-semibold">Vintage (Year):</label>
               <input
                 v-model.number="newWine.vintage"
@@ -138,7 +202,7 @@
               />
             </div>
 
-            <div class="mb-3">
+            <div v-if="!quickAddMode" class="mb-3">
               <label class="form-label fw-semibold">Store / Shop:</label>
               <input
                 v-model="newWine.store"
@@ -148,22 +212,38 @@
               />
             </div>
 
-            <div class="d-grid gap-2">
-              <button
-                type="submit"
-                class="btn btn-lg text-white fw-semibold"
-                style="
-                  background: linear-gradient(135deg, #6a1b4d 0%, #8b3a62 100%);
-                  border: none;
-                  padding: 14px;
-                  border-radius: 12px;
-                  transition: transform 0.2s, box-shadow 0.2s;
-                "
-                onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 8px 20px rgba(106, 27, 77, 0.3)'"
-                onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'"
-              >
-                ✨ Add to Collection
-              </button>
+            <div class="row g-2">
+              <div class="col-8">
+                <button
+                  type="submit"
+                  class="btn btn-lg text-white fw-semibold w-100"
+                  style="
+                    background: linear-gradient(
+                      135deg,
+                      #6a1b4d 0%,
+                      #8b3a62 100%
+                    );
+                    border: none;
+                    padding: 14px;
+                    border-radius: 12px;
+                    transition: transform 0.2s, box-shadow 0.2s;
+                  "
+                  onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 8px 20px rgba(106, 27, 77, 0.3)'"
+                  onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'"
+                >
+                  ✨ {{ quickAddMode ? "Quick Add" : "Add to Collection" }}
+                </button>
+              </div>
+              <div class="col-4">
+                <button
+                  @click="toggleForm"
+                  type="button"
+                  class="btn btn-outline-secondary btn-lg w-100"
+                  style="border-radius: 12px; padding: 14px"
+                >
+                  Cancel
+                </button>
+              </div>
             </div>
           </form>
         </div>
@@ -436,6 +516,11 @@ const sortBy = ref("");
 // Pagination state
 const showAll = ref(false);
 
+// Form state
+const isFormOpen = ref(false);
+const showSuccessMessage = ref(false);
+const quickAddMode = ref(true);
+
 // Form data for new wine
 const newWine = ref({
   label: "",
@@ -658,6 +743,10 @@ const addWine = () => {
     appellation: "",
     vintage: 0, // Default to 0 (NV)
   };
+
+  // Show success message and close form
+  displaySuccessMessage();
+  isFormOpen.value = false;
 };
 
 // Function to delete a wine
@@ -680,6 +769,24 @@ const loadMore = () => {
   showAll.value = true;
 };
 
+// Toggle form visibility
+const toggleForm = () => {
+  isFormOpen.value = !isFormOpen.value;
+};
+
+// Toggle quick add mode
+const toggleQuickAdd = () => {
+  quickAddMode.value = !quickAddMode.value;
+};
+
+// Show success message temporarily
+const displaySuccessMessage = () => {
+  showSuccessMessage.value = true;
+  setTimeout(() => {
+    showSuccessMessage.value = false;
+  }, 3000);
+};
+
 // Function to display stars
 const getStars = (rating: number): string => {
   return "⭐".repeat(rating) + "☆".repeat(5 - rating);
@@ -687,5 +794,51 @@ const getStars = (rating: number): string => {
 </script>
 
 <style scoped>
-/* Minimal custom styles - Bootstrap handles most styling */
+/* Animations for smooth transitions */
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(100px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Add Wine Button Styles */
+.add-wine-trigger {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.add-wine-trigger:hover {
+  transform: translateX(5px);
+}
+
+.add-wine-btn {
+  width: 56px;
+  height: 56px;
+  background: linear-gradient(135deg, #6a1b4d 0%, #8b3a62 100%);
+  border: none;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.add-wine-trigger:hover .add-wine-btn {
+  transform: scale(1.1);
+  box-shadow: 0 8px 20px rgba(106, 27, 77, 0.4);
+}
 </style>
