@@ -184,7 +184,12 @@
                       #8b3a62 100%
                     );
                   "
-                  >{{ filteredWines.length }} wines</span
+                >
+                  {{ filteredWines.length }}
+                  {{ filteredWines.length === 1 ? "wine" : "wines" }}
+                </span>
+                <span v-if="hasActiveFilters" class="ms-2 small text-muted"
+                  >· Filtered</span
                 >
               </p>
             </div>
@@ -288,7 +293,7 @@
 
       <div class="row">
         <div
-          v-for="wine in filteredWines"
+          v-for="wine in displayedWines"
           :key="wine.label"
           class="col-md-6 col-lg-4 mb-4"
         >
@@ -386,6 +391,28 @@
           </div>
         </div>
       </div>
+
+      <!-- Load More Button -->
+      <div v-if="hasMoreWines" class="text-center mt-4">
+        <button
+          @click="loadMore"
+          class="btn btn-lg text-white fw-semibold"
+          style="
+            background: linear-gradient(135deg, #6a1b4d 0%, #8b3a62 100%);
+            border: none;
+            padding: 14px 48px;
+            border-radius: 12px;
+            transition: transform 0.2s, box-shadow 0.2s;
+          "
+          onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 8px 20px rgba(106, 27, 77, 0.3)'"
+          onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'"
+        >
+          Load More Wines ({{ filteredWines.length - 6 }} remaining)
+        </button>
+        <p class="text-muted small mt-3">
+          Showing 6 of {{ filteredWines.length }} wines
+        </p>
+      </div>
     </div>
   </div>
 </template>
@@ -405,6 +432,9 @@ const ratingFilter = ref(0);
 
 // Sort variable
 const sortBy = ref("");
+
+// Pagination state
+const showAll = ref(false);
 
 // Form data for new wine
 const newWine = ref({
@@ -463,6 +493,17 @@ const wines = ref<Wine[]>([
 wines.value[0]?.setRating(5);
 wines.value[1]?.setRating(4);
 wines.value[2]?.setRating(3);
+
+// Check if any filters are active
+const hasActiveFilters = computed(() => {
+  return (
+    searchQuery.value !== "" ||
+    typeFilter.value !== "" ||
+    colorFilter.value !== "" ||
+    ratingFilter.value > 0 ||
+    sortBy.value !== ""
+  );
+});
 
 // Computed property for filtered wines
 const filteredWines = computed(() => {
@@ -530,6 +571,23 @@ const filteredWines = computed(() => {
   }
 
   return result;
+});
+
+// Computed property for displayed wines (with pagination)
+const displayedWines = computed(() => {
+  // Show all wines if filters are active or showAll is true
+  if (hasActiveFilters.value || showAll.value) {
+    return filteredWines.value;
+  }
+  // Otherwise show only first 6 wines
+  return filteredWines.value.slice(0, 6);
+});
+
+// Check if there are more wines to show
+const hasMoreWines = computed(() => {
+  return (
+    !hasActiveFilters.value && !showAll.value && filteredWines.value.length > 6
+  );
 });
 
 // Load wines from localStorage on page load
@@ -614,6 +672,12 @@ const clearFilters = () => {
   colorFilter.value = "";
   ratingFilter.value = 0;
   sortBy.value = "";
+  showAll.value = false;
+};
+
+// Function to load more wines
+const loadMore = () => {
+  showAll.value = true;
 };
 
 // Function to display stars
